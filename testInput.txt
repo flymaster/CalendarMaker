@@ -1,0 +1,18 @@
+Workout Plan
+--
++D0
+!First Workout
+run a lot
+--
++D2
+!Second Workout
+run a lot more!
+--
++W1
+!Third Workout
+keep running
+--
++W1 D2
+!Fourth Workout
+run an odd number of days later
+--

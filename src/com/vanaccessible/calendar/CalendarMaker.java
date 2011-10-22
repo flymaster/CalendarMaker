@@ -17,6 +17,7 @@ import net.fortuna.ical4j.model.ValidationException;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.CalScale;
 import net.fortuna.ical4j.model.property.Description;
+import net.fortuna.ical4j.model.property.DtStamp;
 import net.fortuna.ical4j.model.property.DtStart;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Summary;
@@ -33,6 +34,7 @@ public class CalendarMaker {
 		{
 			System.err.println("Usage: CalendarMaker [inputFile] [outputFile] [startYear] [startMonth] [startDay]");
 			System.err.println("Example: CalendarMaker myPlan.txt myCal.ics 2012 3 23");
+			return;
 		}
 		
 		String inputFileName = args[0];
@@ -92,17 +94,18 @@ public class CalendarMaker {
 						return;
 					}
 					properties.add(ug.generateUid());
+					properties.add(new DtStamp());
 
 				}
 				
-				if (next.startsWith("+"))	//date;
+				else if (next.startsWith("+"))	//date;
 				{
 					next = next.substring(1);
 					GregorianCalendar eventDate = getDate(jCal, next.trim());
 					properties.add(new DtStart(new Date(eventDate.getTime())));
 				}
 				
-				if (next.startsWith("!"))	//title;
+				else if (next.startsWith("!"))	//title;
 				{
 					next = next.substring(1);
 					next = next.trim();
