@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project CalendarMaker with libraries in sub-folder">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="/Users/vanne/Documents/workspace/CalendarMaker/jar/CalendarMaker.jar">
+            <manifest>
+                <attribute name="Main-Class" value="com.vanaccessible.calendar.CalendarMaker"/>
+                <attribute name="Class-Path" value=". CalendarMaker_lib/backport-util-concurrent-3.1.jar CalendarMaker_lib/commons-codec-1.5.jar CalendarMaker_lib/commons-lang-2.6.jar CalendarMaker_lib/commons-logging-1.1.1.jar CalendarMaker_lib/ical4j-1.0.1.jar"/>
+            </manifest>
+            <fileset dir="/Users/vanne/Documents/workspace/CalendarMaker/bin"/>
+        </jar>
+        <delete dir="/Users/vanne/Documents/workspace/CalendarMaker/jar/CalendarMaker_lib"/>
+        <mkdir dir="/Users/vanne/Documents/workspace/CalendarMaker/jar/CalendarMaker_lib"/>
+        <copy file="/Users/vanne/Documents/workspace/CalendarMaker/lib/backport-util-concurrent-3.1.jar" todir="/Users/vanne/Documents/workspace/CalendarMaker/jar/CalendarMaker_lib"/>
+        <copy file="/Users/vanne/Documents/workspace/CalendarMaker/lib/commons-codec-1.5.jar" todir="/Users/vanne/Documents/workspace/CalendarMaker/jar/CalendarMaker_lib"/>
+        <copy file="/Users/vanne/Documents/workspace/CalendarMaker/lib/commons-lang-2.6.jar" todir="/Users/vanne/Documents/workspace/CalendarMaker/jar/CalendarMaker_lib"/>
+        <copy file="/Users/vanne/Documents/workspace/CalendarMaker/lib/commons-logging-1.1.1.jar" todir="/Users/vanne/Documents/workspace/CalendarMaker/jar/CalendarMaker_lib"/>
+        <copy file="/Users/vanne/Documents/workspace/CalendarMaker/lib/ical4j-1.0.1.jar" todir="/Users/vanne/Documents/workspace/CalendarMaker/jar/CalendarMaker_lib"/>
+    </target>
+</project>
