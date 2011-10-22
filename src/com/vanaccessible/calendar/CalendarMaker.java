@@ -1,5 +1,10 @@
 package com.vanaccessible.calendar;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.GregorianCalendar;
+
 public class CalendarMaker {
 
 	/**
@@ -17,6 +22,20 @@ public class CalendarMaker {
 		int startYear = Integer.parseInt(args[2]);
 		int startMonth = Integer.parseInt(args[3]);
 		int startDay = Integer.parseInt(args[4]);
+		
+		GregorianCalendar jCal = new GregorianCalendar();
+		jCal.set(GregorianCalendar.YEAR, startYear);
+		jCal.set(GregorianCalendar.MONTH, startMonth - 1);
+		jCal.set(GregorianCalendar.DAY_OF_MONTH, startDay);
+		
+		 try {
+			BufferedReader in = new BufferedReader(new FileReader(inputFileName));
+		} catch (FileNotFoundException e) {
+			System.err.println("Input file does not exist!");
+		}
+		
+		
+
 
 	}
 
