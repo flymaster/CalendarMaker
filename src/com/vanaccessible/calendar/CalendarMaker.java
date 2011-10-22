@@ -2,16 +2,24 @@ package com.vanaccessible.calendar;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
+import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.Date;
+import net.fortuna.ical4j.model.PropertyList;
+import net.fortuna.ical4j.model.ValidationException;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.CalScale;
+import net.fortuna.ical4j.model.property.Description;
+import net.fortuna.ical4j.model.property.DtStart;
 import net.fortuna.ical4j.model.property.ProdId;
+import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.util.UidGenerator;
 
@@ -53,6 +61,7 @@ public class CalendarMaker {
 		
 		ArrayList<VEvent> events = new ArrayList<VEvent>();
 		VEvent v = null;
+		PropertyList properties = null;
 		String title = null;
 		try {
 			if (in.ready())
@@ -67,13 +76,14 @@ public class CalendarMaker {
 			while (in.ready())
 			{
 				String next = in.readLine();
-				if (next.equals("--"))		//Start event;
+				if (next.equals("--"))		//Start/End event;
 				{
-					if (v!=null)
+					if (properties!=null)
 					{
+						v = new VEvent(properties);
 						events.add(v);
 					}
-					v = new VEvent();
+					properties = new PropertyList();
 					UidGenerator ug;
 					try {
 						ug = new UidGenerator(title);
@@ -81,23 +91,27 @@ public class CalendarMaker {
 						e.printStackTrace();
 						return;
 					}
-					v.getProperties().add(ug.generateUid());
+					properties.add(ug.generateUid());
 
 				}
 				
 				if (next.startsWith("+"))	//date;
 				{
 					next = next.substring(1);
-					GregorianCalendar eventDate = getDate(jCal, next);
+					GregorianCalendar eventDate = getDate(jCal, next.trim());
+					properties.add(new DtStart(new Date(eventDate.getTime())));
 				}
 				
 				if (next.startsWith("!"))	//title;
 				{
 					next = next.substring(1);
+					next = next.trim();
+					properties.add(new Summary(next));
 				}
 				else						//description
 				{
-					
+					next = next.trim();
+					properties.add(new Description(next));
 				}
 			}
 		} catch (IOException e) {
@@ -105,8 +119,30 @@ public class CalendarMaker {
 			e.printStackTrace();
 		}
 
-		
+		for (VEvent e : events)
+		{
+			iCal.getComponents().add(e);
+		}
 
+		FileOutputStream fout;
+		try {
+			fout = new FileOutputStream(outputFileName);
+		} catch (FileNotFoundException e1) {
+			System.err.println("Output file not writable");
+			return;
+		}
+
+		CalendarOutputter outputter = new CalendarOutputter();
+		try {
+			outputter.output(iCal, fout);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			return;
+		} catch (ValidationException e1) {
+			System.err.println("Input file not a valid calendar!");
+			e1.printStackTrace();
+			return;
+		}
 
 	}
 
